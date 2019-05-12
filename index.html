@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/nvd3/1.8.6/nv.d3.js"></script>
+
+    <style>
+        #chart svg {
+            height: 400px;
+            width: 50%;
+        }
+    </style>
+
+</head>
+<body>
+    <div id="chart">
+        <svg></svg>
+    </div>
+    <div>
+        <select name="chooseData" id="chooseData">
+            <option value="" selected disabled>select data</option>
+            <option value="apples">apples</option>
+            <option value="potatoes">potatoes</option>
+        </select>
+    </div>
+
+    <script>
+        let dataChooser = document.getElementById('chooseData')
+        dataChooser.addEventListener('change', event => {
+            let i = dataChooser.selectedIndex
+            let value = dataChooser.options[i].value
+            console.log(value)
+            if (value === 'potatoes') {
+                renderGraph(potatoes())
+            } else if (value === 'apples') {
+                renderGraph(apples())
+            }
+            
+        })
+
+
+        //Each bar represents a single discrete quantity.
+        function apples() {
+            return [
+                {
+                    key: "apples",
+                    values: [
+                        {
+                            "label": "A Label",
+                            "value": 29.765957771107
+                        },
+                        {
+                            "label": "B Label",
+                            "value": 0
+                        },
+                        {
+                            "label": "C Label",
+                            "value": 32.807804682612
+                        },
+                        {
+                            "label": "D Label",
+                            "value": 196.45946739256
+                        },
+                        {
+                            "label": "E Label",
+                            "value": 0.19434030906893
+                        },
+                        {
+                            "label": "F Label",
+                            "value": 98.079782601442
+                        },
+                        {
+                            "label": "G Label",
+                            "value": 13.925743130903
+                        },
+                        {
+                            "label": "H Label",
+                            "value": 5.1387322875705
+                        }
+                    ]
+                }
+            ]
+        }
+        function potatoes() {
+            return [
+                {
+                    key: "Potatoes",
+                    values: [
+                        {
+                            "label": "A Label",
+                            "value": 10
+                        },
+                        {
+                            "label": "B Label",
+                            "value": 3
+                        },
+                        {
+                            "label": "C Label",
+                            "value": 39
+                        },
+                        {
+                            "label": "D Label",
+                            "value": 40
+                        },
+                        {
+                            "label": "E Label",
+                            "value": 23
+                        },
+                        {
+                            "label": "F Label",
+                            "value": 98
+                        },
+                        {
+                            "label": "G Label",
+                            "value": 56
+                        },
+                        {
+                            "label": "H Label",
+                            "value": 34
+                        }
+                    ]
+                }
+            ]
+        }
+
+        let renderGraph = function(data) {
+            nv.addGraph(function () {
+                var chart = nv.models.discreteBarChart()
+                    .x(function (d) { return d.label })    //Specify the data accessors.
+                    .y(function (d) { return d.value })
+                    .staggerLabels(true)    //Too many bars and not enough room? Try staggering labels.
+                    // .tooltips(false)        //Don't show tooltips
+                    .showValues(true)       //...instead, show the bar value right on top of each bar.
+                    // .transitionDuration(350)
+                    ;
+
+                d3.select('#chart svg')
+                    .datum(data)
+                    .call(chart);
+
+                nv.utils.windowResize(chart.update);
+
+                return chart;
+            });
+        }
+
+    </script>
+
+
+</body>
+</html>
